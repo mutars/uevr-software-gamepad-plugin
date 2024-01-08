@@ -4,5 +4,5 @@ P.S. make sure you don't have any real gamepads turned on during session.
 
 How to Start.
 1. download latest release of VigEm bus https://github.com/nefarius/ViGEmBus/releases and install driver.
-2. drop plugin dll to (UEVR) game config folder location/plugins
+2. drop plugin dll from x64/debug or release to (UEVR) game config folder location/plugins. (alternativly you can compile plugin using community Visual studio)
  

@@ -1,8 +1,20 @@
-This plugin will echo gamepad emulation from praydog UEVR injector to software emulated, so steam could pick up gamepad state and overlap with Keyboard/Mouse mapping. 
-This Plugin is not intented to remap gamepad mappings it is working out of the box with UEVR injector and steam, however if you need gamepad->keyboard/mouse mapping, this plugin is sole purpose.
-P.S. make sure you don't have any real gamepads turned on during session.
+# Gamepad Emulation Plugin for Praydog UEVR
 
-How to Start.
-1. download latest release of VigEm bus https://github.com/nefarius/ViGEmBus/releases and install driver.
-2. drop plugin dll from x64/debug or release to (UEVR) game config folder location/plugins. (alternativly you can compile plugin using community Visual studio)
- 
+This plugin facilitates gamepad emulation from Praydog UEVR injector to software emulation, allowing Steam to recognize gamepad input and integrate it with Keyboard/Mouse mappings.
+
+## Overview
+
+- The plugin does not intend to remap gamepad mappings but seamlessly collaborates with UEVR injector and Steam.
+- Its primary purpose is to provide gamepad-to-keyboard/mouse mapping.
+
+### Note
+Ensure no physical gamepads are active during the session.
+
+## Getting Started
+
+1. **Download VigEm Bus**
+   - Obtain the latest release of VigEm bus from [GitHub](https://github.com/nefarius/ViGEmBus/releases) and install the driver.
+
+2. **Plugin Installation**
+   - Place the plugin DLL from either `x64/debug` or `release` into the (UEVR) game configuration folder under `plugins`.
+   - Alternatively, compile the plugin using Visual Studio within the community.

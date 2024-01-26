@@ -289,7 +289,7 @@ private:
         }
     }
 
-    bool is_hand_behind_head(uint32_t hand, float sensitivity = 0.2f) {
+    bool is_hand_behind_head(uint32_t hand, float sensitivity = 0.15f) {
         const auto vr = API::get()->param()->vr;
 
         if (!vr->is_using_controllers()) {
@@ -307,14 +307,17 @@ private:
         Vector3f hmd_position{};
         glm::quat hmd_rotation{};
         vr->get_grip_pose(hmd_index, (UEVR_Vector3f*)&hmd_position, (UEVR_Quaternionf*)&hmd_rotation);
+        glm::quat rot_offset{};
+        vr->get_rotation_offset((UEVR_Quaternionf*)&rot_offset);
 
+        hmd_rotation = rot_offset * hmd_rotation;
         const auto hmd_delta = Vector3f{ hand_position - hmd_position };
         const auto distance = glm::length(hmd_delta);
         distance_to_head = distance;
 
 
         const auto hmd_dir = glm::normalize(hmd_delta);
-        const auto flattened_forward = glm::normalize(Vector3f{ 0.0f, hmd_rotation.y, hmd_rotation.z });
+        const auto flattened_forward = glm::normalize(Vector3f{ hmd_rotation.x, 0.0f, hmd_rotation.z });
 
         const auto hand_dot_flat_raw = glm::dot(flattened_forward, hmd_dir);
         hand_dot_flat = hand_dot_flat_raw;
@@ -322,7 +325,7 @@ private:
         if (distance >= 0.3f) {
             return false;
         }
-        return hand_dot_flat_raw <= -sensitivity;
+        return hand_dot_flat_raw > sensitivity;
     }
 
 
@@ -366,16 +369,15 @@ private:
         if (!API::get()->param()->functions->is_drawing_ui()) {
             return;
         }
-        auto direction = get_tilt_direction();
 
         if (ImGui::Begin("SCUM", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_AlwaysAutoResize)) {
 
-            //ImGui::Text("Left Hand to HMD distance=%f", distance_to_head);
-            //ImGui::Text("Hand dot flat=%f", hand_dot_flat);
-            ImGui::Text("Tilt Direction %d", direction);
-            ImGui::Text("HMD rotation Yaw=%f", m_hmd_rotation.y);
-            ImGui::Text("HMD rotation Pitch=%f", m_hmd_rotation.x); // tilt -15 to 15 , < -15 left, > 15 right
-            ImGui::Text("HMD rotation Roll=%f", m_hmd_rotation.z); // up down -30 to 30
+            ImGui::Text("Left Hand to HMD distance=%f", distance_to_head);
+            ImGui::Text("Hand dot flat=%f", hand_dot_flat);
+            // ImGui::Text("Tilt Direction %d", hand_dot_flat.x);
+            //ImGui::Text("HMD rotation Yaw=%f", m_hmd_rotation.y);
+            //ImGui::Text("HMD rotation Pitch=%f", m_hmd_rotation.x); // tilt -15 to 15 , < -15 left, > 15 right
+            //ImGui::Text("HMD rotation Roll=%f", m_hmd_rotation.z); // up down -30 to 30
 
             ImGui::End();
         }
